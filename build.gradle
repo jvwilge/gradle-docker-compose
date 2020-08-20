@@ -1,4 +1,5 @@
 plugins {
+	id "com.avast.gradle.docker-compose" version "0.13.0"
 	id 'org.springframework.boot' version '2.3.3.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
 	id 'java'
@@ -18,6 +19,15 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+}
+
+dockerCompose {
+	// set to projectDir when PWD is empty (running from Intellij for example)
+	environment.put("PWD", getenv("PWD") ?: projectDir)
+	isRequiredBy(test)
+
+	// enable following line when debugging container issues
+	// captureContainersOutput(true)
 }
 
 test {
