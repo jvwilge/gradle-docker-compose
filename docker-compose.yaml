@@ -1,0 +1,11 @@
+version: '3'
+services:
+  database:
+    container_name: postgres_db
+    image: "postgres" # use latest official postgres version
+    env_file:
+      - database.env # configure postgres
+    ports:
+      - 5432 # configure port, random port will be selected
+    volumes:
+      - '${PWD}/build/docker-volumes/database-data:/var/lib/postgresql/data/' # persist data even if container shuts down
