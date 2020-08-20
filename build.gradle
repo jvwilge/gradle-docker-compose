@@ -1,3 +1,5 @@
+import static java.lang.System.getenv
+
 plugins {
 	id "com.avast.gradle.docker-compose" version "0.13.0"
 	id 'org.springframework.boot' version '2.3.3.RELEASE'
@@ -32,4 +34,10 @@ dockerCompose {
 
 test {
 	useJUnitPlatform()
+}
+
+test.doFirst {
+	// the postgres port is mapped to a random port number that is located in a map
+	def dbPort = dockerCompose.servicesInfos.database.postgres_db.tcpPorts[5432]
+	environment.put("spring.datasource.url", "jdbc:postgresql://localhost:$dbPort/postgres")
 }
